@@ -11,16 +11,6 @@ export default class LoginForm extends Component {
 
   state = { error: null }
 
-  handleSubmitBasicAuth = ev => {
-    ev.preventDefault()
-    const { user_name, password } = ev.target
-    
-    TokenService.saveAuthToken(TokenService.makeBasicAuthToken(user_name.value, password.value))
-    
-    user_name.value = ''
-    password.value = ''
-    this.props.onLoginSuccess()
-  }
 
   handleSubmitJwtAuth = e => {
     e.preventDefault();
@@ -35,6 +25,7 @@ export default class LoginForm extends Component {
         user_name.value = ''
         password.value = ''
         TokenService.saveAuthToken(res.AuthToken) //but res.authToken has only id so what happens with password?
+        console.log(res.token)
         this.props.onLoginSuccess()
       })
       .catch(res => {
@@ -50,7 +41,7 @@ export default class LoginForm extends Component {
         onSubmit={this.handleSubmitJwtAuth}
       >
         <div role='alert'>
-          {error && <p className='red'>{error}</p>}
+          {error && <p className='red'>{error.message}</p>}
         </div>
         <div className='user_name'>
           <label htmlFor='LoginForm__user_name'>
